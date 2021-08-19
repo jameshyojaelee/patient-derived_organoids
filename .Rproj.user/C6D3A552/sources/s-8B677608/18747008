@@ -1,0 +1,25 @@
+{
+    "id": "18747008",
+    "path": "C:/Users/james/Desktop/patient-derived_organoids/Deseq2/Deseq2.R",
+    "project_path": "Deseq2.R",
+    "type": "r_source",
+    "hash": "432666530",
+    "contents": "",
+    "dirty": false,
+    "created": 1629415471741.0,
+    "source_on_save": false,
+    "relative_order": 1,
+    "properties": {
+        "tempName": "Untitled1",
+        "cursorPosition": "1,0",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1629415528,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1629415528299,
+    "read_only": false,
+    "read_only_alternatives": []
+}
