@@ -1,1 +1,12 @@
+library(tximport)
+
+
 setwd("C:/Users/james/Desktop/patient-derived_organoids/quant_kallisto")
+
+files <- c("/hF2_TAK_100nm/abundance.h5", "/hf2_Untreated/abundance.h5")
+
+
+hF2 <- tximport(files, type="kallisto", txOut=TRUE)
+
+hF2_TAK <-  tximport("hF2_TAK_100nm/abundance.h5", type="kallisto", txOut=TRUE)
+hF2_TAK <- read.table(hF2_TAK)
