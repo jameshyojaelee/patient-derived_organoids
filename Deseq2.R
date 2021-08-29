@@ -1,8 +1,8 @@
 library(tximport)
 
 
-setwd("C:/Users/james/Desktop/patient-derived_organoids/quant_kallisto")
-dir <- "C:/Users/james/Desktop/patient-derived_organoids/quant_kallisto/"
+setwd("D:/patient-derived_organoids/Deseq2")
+dir <- "D:/patient-derived_organoids/quant_kallisto"
 
 library(ensembldb)
 library(EnsDb.Hsapiens.v86)
@@ -11,7 +11,8 @@ EnsDb <- EnsDb.Hsapiens.v86
 EnsDb
 
 k <- keys(EnsDb, keytype = "TXNAME") #or GENENAME
-tx2gene <- select(EnsDb, k, "GENENAME", "TXNAME")
+tx2gene <- select(EnsDb, k, "GENENAME", "TXNAME") # close library(dplyr) before running this line
+head(tx2gene)
 
 
 samples <- read.table(file.path(dir, "samples.txt"), header = TRUE)
@@ -42,10 +43,16 @@ library(DESeq2)
 ddsTxi <- DESeqDataSetFromTximport(txi.kallisto2,
                                    colData = samples,
                                    design = ~ condition)
-View(counts(ddsTxi))
+head(counts(ddsTxi))
 ddst <- estimateSizeFactors(ddsTxi)
 sizeFactors(ddst)
+
+raw_counts <- counts(ddst, normalized=FALSE)
+write.table(raw_counts, file="raw_counts.txt", sep="\t", quote=F, col.names=NA)
+
+
 normalized_counts <- counts(ddst, normalized=TRUE)
+
 normalized_counts <- as.data.frame(normalized_counts)
 library(dplyr)
 normalized_counts <- tibble::rownames_to_column(normalized_counts, "NAME") #convert the matrix names to a column
@@ -55,6 +62,9 @@ normalized_counts <- tibble::rownames_to_column(normalized_counts, "NAME") #conv
 write.table(normalized_counts, file="normalized_counts.txt", sep="\t", quote=F, col.names=NA)
 
 tpm <- 1e6*t(t(normalized_counts[c(1:nrow(normalized_counts)),])/colSums(normalized_counts))
+
+write.table(tpm, file="tpm.txt", sep="\t", quote=F, col.names=NA)
+
 head(tpm) # take a look at the TPM values
 colSums(tpm) # make sure that TPM values add up to the same number for each sample
 log2.tpm <- log2(tpm+1)
@@ -77,3 +87,8 @@ DE.bools <- abs(res.df[,2]) > 1 & res.df[,6] < 0.05 # filter for fold change gre
 
 heatmap(log2.tpm[DE.bools,])
 
+
+################# PCA analysis#########################
+library("pcaExplorer")
+
+pcaExplorer(dds=dds)
